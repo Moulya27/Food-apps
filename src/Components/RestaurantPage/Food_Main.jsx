@@ -29,7 +29,6 @@ const Img = styled.img`
 
 const Wrapper = styled.header`
   max-width: 100vw;
-  margin-top: 90px;
   background: #171a29;
 `;
 const settings = {
