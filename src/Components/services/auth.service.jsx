@@ -3,6 +3,7 @@ import axios from "axios";
 const API_URL = "http://localhost:3000/auth";
 
 const signup = (email, password) => {
+  
   try{
   return axios
     .post(API_URL + "/signup", {
@@ -10,11 +11,12 @@ const signup = (email, password) => {
       password,
     })
     .then((response) => {
-      console.log(response.data);
+      //console.log(response.data.errors);
+     
       if (response.data.accessToken) {
         localStorage.setItem("user", JSON.stringify(response.data));
       }
-
+      console.log(response.data.errors?.map((error)=>console.log(error.msg)))
       return response.data;
     });
   }
@@ -30,22 +32,22 @@ const login = (email, password) => {
       password,
     })
     .then((response) => {
+     
       if (response.data.accessToken) {
         localStorage.setItem("user", JSON.stringify(response.data));
       }
-
+      console.log(response.data.errors?.map((error)=>console.log(error.msg)))
       return response.data;
+      
     });
  
 };
 
 const logout = () => {
- 
   localStorage.removeItem("user");
 };
 
 const getCurrentUser = () => {
-  
   return JSON.parse(localStorage.getItem("user"));
 };
 

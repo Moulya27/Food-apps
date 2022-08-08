@@ -8,11 +8,13 @@ import { data } from "../../restaurantData";
 import Discount from "../Assets/discount.svg";
 import CloseIcon from "@mui/icons-material/Close";
 import { Drawer, Box } from "@mui/material";
-// import { Navbar } from "./Navbar";
+
 import ScrollToTop from "react-scroll-to-top";
 import { useWindowScroll } from "react-use";
 import { useNavigate } from "react-router-dom";
 import { PreLoader } from "../PreLoader";
+import Navbar from "./navbar";
+import authService from "../services/auth.service";
 const Img = styled.img`
   cursor: pointer;
   display: block;
@@ -51,7 +53,20 @@ function Food_Main() {
     }, 3000);
   }, []);
 
-  
+  const [currentUser, setCurrentUser] = useState(undefined);
+
+  useEffect(() => {
+    const user = authService.getCurrentUser();
+
+    if (user) {
+      setCurrentUser(user);
+    }
+  }, []);
+
+  const logOut = () => {
+    authService.logout();
+  };
+
   const handleClick = (id) => {
     localStorage.setItem("foodId", JSON.stringify(data[+id]));
     navigate(`/food/${id}`);
@@ -140,7 +155,7 @@ function Food_Main() {
         <div className="indicator" style={{ width: `${scrolled}%` }}></div>
       </div>{" "}
       <ScrollToTop smooth color="#fc8019" />
-      {/* <Navbar /> */}
+      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} logOut={logOut}/> 
       <Drawer
         anchor="right"
         open={isDraweropen}

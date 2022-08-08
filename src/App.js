@@ -10,9 +10,11 @@ import { ThankYou } from "./Components/Thankyou/Thankyou";
 import Navbar from "./Components/RestaurantPage/navbar";
 import Signup from "./Components/Auth/Signup";
 import Login from "./Components/Auth/Login";
-import NavBar from "./Components/Auth/NavBar";
+//import NavBar from "./Components/Auth/NavBar";
 import authService from "./Components/services/auth.service";
 import NotLoggedIn from "./Components/Auth/NotLoggedIn";
+import Protected from "./Components/Auth/Protected";
+import { LandingPage } from "./Components/LandingPage/LandingPage";
 
 function App() {
   if (!localStorage.getItem("Cart")) {
@@ -31,7 +33,8 @@ function App() {
     );
   }
 
-  const [currentUser, setCurrentUser] = useState(undefined);
+ const [currentUser, setCurrentUser] = useState(undefined);
+  console.log(currentUser);
 
   useEffect(() => {
     const user = authService.getCurrentUser();
@@ -39,28 +42,30 @@ function App() {
     if (user) {
       setCurrentUser(user);
     }
-  }, []);
+  }, [])
 
-  const logOut = () => {
-    authService.logout();
-  };
-
+ 
   return (
+
     <>
-      <NavBar
+       
+      {/*<NavBar
         currentUser={currentUser}
         setCurrentUser={setCurrentUser}
         logOut={logOut}
-      />
+  />*/}
       <Routes>
         {/*<Route path="/" element={<LandingPage />} />*/}
+        <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/notloggedin" element={<NotLoggedIn/>} />
+        <Route element={<Protected/>}>
+        <Route path="/home" element={<LandingPage />} />
         <Route path="/restaurants" element={<Food_Main />} />
         <Route path="/:food/:id" element={<Food_Detail />} />
         <Route path="/payment" element={<PaymentDetails />} />
         <Route path="/thankyou" element={<ThankYou />} />
+        </Route>
       </Routes>
     </>
   );

@@ -5,11 +5,12 @@ import Button from "@mui/material/Button";
 import "./PaymentDetails.css";
 import Veg from "../Assets/veg.jpg";
 import NonVegan from "../Assets/NonVeg.jpg";
-// import { Navbar } from "../RestaurantPage/Navbar";
+import Navbar from "../RestaurantPage/navbar";
 import { Address } from "./Address";
 import Coupoun from "../Assets/coupon.jpg";
 import Coupoun_2 from "../Assets/coupon_2.jpg";
 import Coupoun_3 from "../Assets/coupon_3.jpg";
+import authService from "../services/auth.service";
 export const PaymentDetails = () => {
   const [isDraweropen, setisDraweropen] = useState(false);
   const [couponApplied, isCouponApplied] = useState(false);
@@ -18,6 +19,7 @@ export const PaymentDetails = () => {
   const [discount_2, isDiscount_2] = useState(20);
   const [discount_3, isDiscount_3] = useState(50);
   const [state, setState] = useState([]);
+  const [currentUser, setCurrentUser] = useState(undefined);
 
   let total_amount;
   useEffect(() => {
@@ -25,6 +27,19 @@ export const PaymentDetails = () => {
     setState(cart);
   }, []);
 
+
+
+  useEffect(() => {
+    const user = authService.getCurrentUser();
+
+    if (user) {
+      setCurrentUser(user);
+    }
+  }, []);
+
+  const logOut = () => {
+    authService.logout();
+  };
   const handleChange = (amt) => {
     total_amount = state.map((e) => (e = e.price*e.q)).reduce((a, b) => a + b, 0);
     total_amount = (+total_amount - +total_amount * (amt / 100)).toFixed(2);
@@ -52,7 +67,7 @@ export const PaymentDetails = () => {
 
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} logOut={logOut} /> 
       <Address />
       <Drawer
         anchor="right"

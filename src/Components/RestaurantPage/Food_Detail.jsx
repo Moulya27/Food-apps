@@ -3,7 +3,7 @@ import OfferImg from "../Assets/offerImg.jpg";
 import Veg from "../Assets/veg.jpg";
 import NonVegan from "../Assets/NonVeg.jpg";
 import "./Food_Detail.css";
-// import { Navbar } from "./Navbar";
+import Navbar from "./navbar";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -13,6 +13,7 @@ import { useWindowScroll } from "react-use";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import { PreLoader } from "../PreLoader";
+import authService from "../services/auth.service";
 const style = {
   position: "absolute",
   top: "50%",
@@ -35,6 +36,21 @@ export const Food_Detail = () => {
   const [Value, isValue] = useState("");
   const [scrolled, setScrolled] = useState(0);
   const [loading, isLoading] = useState(false);
+
+
+  const [currentUser, setCurrentUser] = useState(undefined);
+console.log(currentUser);
+  useEffect(() => {
+    const user = authService.getCurrentUser();
+
+    if (user) {
+      setCurrentUser(user);
+    }
+  }, []);
+
+  const logOut = () => {
+    authService.logout();
+  };
 
   useEffect(() => {
     isLoading(true);
@@ -174,7 +190,7 @@ export const Food_Detail = () => {
           </Box>
         </Fade>
       </Modal>
-      {/* <Navbar /> */}
+      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} logOut={logOut} /> 
       <div className="topbar">
         <div className="topbar_content">
           <div className="food_img_topbar">
@@ -318,7 +334,7 @@ export const Food_Detail = () => {
             </div>
             <Link className="link" to="/payment">
               <button className="checkout">
-                CHECKOUT&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-right"></i>
+                CHECKOUT&nbsp;&nbsp;&nbsp;<i className="fas fa-arrow-right"></i>
               </button>
             </Link>
           </div>

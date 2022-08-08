@@ -12,7 +12,7 @@ router.post(
   "/signup",
   [
     check("email", "Invalid email").isEmail(),
-    check("password", "Password must be atleadt 6 chars long").isLength({
+    check("password", "Password must be atleast 6 chars long").isLength({
       min: 6,
     }),
   ],
@@ -32,7 +32,7 @@ router.post(
       return user.email === email;
     });
     if (user) {
-      return res.status(200).json({
+      return res.status(400).json({
         errors: [
           {
             email: user.email,

@@ -1,31 +1,32 @@
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+.logoAuth{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.formContainer{
+border-radius: 15px;
+  padding: 50px 60px;
+  margin-top: 10vh;
+  background-color: wheat
 }
 
-.signupContainer {
-  background-image: url("https://b.zmtcdn.com/web_assets/81f3ff974d82520780078ba1cfbd453a1583259680.png");
-  height: 100vh;
-}
 
-.signupBtn {
+.signupBtn{
   border: none;
   outline: none;
   height: 50px;
   width: 100%;
-  background-color: orange;
+  background-color: #FC8019;
   color: white;
   border-radius: 4px;
   font-weight: bold;
 }
-.addBtn{
-    border: none;
-    outline: none;
-    height: 30px;
-    width: auto;
-    padding: 0 10px 0 10px;
-    background-color: orange;
-    color: white;
-    border-radius: 4px;
+.msg{
+  text-align: center;
+  margin-top: 12px;
 }
+.errorMsg{
+  color: #cc0000;
+  font-size: 18px;
+}
+

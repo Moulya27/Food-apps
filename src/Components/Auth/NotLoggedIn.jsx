@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import './NotLoggedIn.css'
 
 function NotLoggedIn() {
@@ -10,6 +11,7 @@ function NotLoggedIn() {
               alt="cart is empty"
             />
       <p>Oops! Looks like you have not logged in</p>
+      <Link to='/'><button className='btnLogin'>Login</button></Link>
     </div>
   )
 }

@@ -11,7 +11,7 @@
 .logo{
     width:70px;
     margin-right:80px;
-    margin-left: 150px;
+    margin-left: 50px;
     cursor: pointer;
     transform: all 0.3s ease-in;
 }
@@ -69,7 +69,11 @@
 .fa-angle-down{
     background-color:#fc8019;
 }
-
+.search{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .div2_nav{
     margin-left: 230px;
 }
@@ -181,7 +185,7 @@ font-size: small;
     padding:1px;
     color: #fc8019;
     position: relative;
-    top: 2px;
+    top: -6px;
 }
 .div6_nav{
     display: flex;
