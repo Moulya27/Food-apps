@@ -8,7 +8,7 @@ console.log(currentUser);
 useEffect(() => {
     const user = authService.getCurrentUser();
   
-    setCurrentUser(!!user); // <-- sets to defined boolean value
+    setCurrentUser(!!user);
   }, []);
 
   if (currentUser === undefined) {
