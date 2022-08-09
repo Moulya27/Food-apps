@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route } from "react-router-dom";
 
@@ -7,11 +7,8 @@ import { Food_Main } from "./Components/RestaurantPage/Food_Main";
 import { Food_Detail } from "./Components/RestaurantPage/Food_Detail";
 import { PaymentDetails } from "./Components/CheckoutPage/PaymentDetails";
 import { ThankYou } from "./Components/Thankyou/Thankyou";
-import Navbar from "./Components/RestaurantPage/navbar";
 import Signup from "./Components/Auth/Signup";
 import Login from "./Components/Auth/Login";
-//import NavBar from "./Components/Auth/NavBar";
-import authService from "./Components/services/auth.service";
 import NotLoggedIn from "./Components/Auth/NotLoggedIn";
 import Protected from "./Components/Auth/Protected";
 import { LandingPage } from "./Components/LandingPage/LandingPage";
