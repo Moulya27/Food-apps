@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
-import CloseIcon from "@mui/icons-material/Close";
-import { Drawer, Box } from "@mui/material";
 import LoadingSpinner from "../LoaderSpinner";
 import "./LandingPage.css";
 import Animation from "./Animation";
 import Footer1 from "./Footer1";
 import Footer2 from "./Footer2";
 import { cities } from "../../data";
-import { useNavigate, Link} from "react-router-dom";
-import Firebase from "../../Firebase";
+import { useNavigate, Link } from "react-router-dom";
+
 let id;
 function Card(props) {
   return (
@@ -18,6 +16,7 @@ function Card(props) {
           <img
             style={{ width: props.widthy, height: props.heighty }}
             src={props.imgsrc}
+            alt=""
           />
         </div>
         <div>
@@ -32,27 +31,16 @@ function Card(props) {
 }
 
 export function LandingPage() {
-  const [isDraweropen, setisDraweropen] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [res, setRes] = useState([]);
-  const [login, setLogin] = useState(true);
-  const [number, setNumber] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [otp, setOtp] = useState(false);
-  const [verificationId, setVerificationId] = useState("");
-  const [otp_valid, setOtp_valid] = useState("");
+
   let navigate = useNavigate();
-  let API_KEY = "5bdc9bb5e105da7714d3b4fda20a88c6";
 
   function check() {
-  
-      alert("Welcome to restaurant page");
-      navigate("/restaurants");
-    }
-  
+    alert("Welcome to restaurant page");
+    navigate("/restaurants");
+  }
 
   useEffect(() => {
     if (!query) return;
@@ -73,28 +61,6 @@ export function LandingPage() {
     }, 300);
     return () => clearTimeout(id);
   }, [query]);
-
-  function geoLocation() {
-    setisLoading(true);
-    navigator.geolocation.getCurrentPosition((success) => {
-      let { latitude, longitude } = success.coords;
-      fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric&lang=en`
-      )
-        .then((response) => response.json())
-        .then((name) => {
-          setTimeout(() => {
-            let fetch = `${name.city.name}, ${name.city.country}`;
-            setQuery(fetch);
-            setisLoading(false);
-          }, 1000);
-        })
-        .catch(() => {
-          setisLoading(false);
-          setQuery("");
-        });
-    });
-  }
 
   let text = [
     "Game night?",
@@ -121,148 +87,8 @@ export function LandingPage() {
     }, 2000);
   }
 
-  localStorage.setItem("Location", JSON.stringify(query));
-
-  useEffect(() => {
-    let id = JSON.parse(localStorage.getItem("verificationId"));
-    let user = JSON.parse(localStorage.getItem("user_details"));
-    if (
-      user.name == "" ||
-      user.email == "" ||
-      user.number == "" ||
-      id.verificationId == ""
-    ) {
-      let temp = {
-        name: name,
-        email: email,
-        number: number,
-      };
-      localStorage.setItem("user_details", JSON.stringify(temp));
-    }
-  }, [name, email, number]);
-
-  useEffect(() => {
-    setOtp_valid(otp_valid);
-  }, [otp_valid]);
-
-  // Firebase OTP Authentication
-  function handleSubmit_Otp_sigin(e) {
-    e.preventDefault();
-    const code = otp_valid;
-    window.confirmationResult
-      .confirm(code)
-      .then((result) => {
-        const user = result.user;
-        setVerificationId(user.uid);
-        localStorage.setItem("verificationId", JSON.stringify(user.uid));
-        alert("Account created successfully Login Now !");
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
-    setOtp(false);
-    setisDraweropen(false);
-  }
-
-  function handleSubmit_Otp_login(e) {
-    e.preventDefault();
-    const code = otp_valid;
-    window.confirmationResult
-      .confirm(code)
-      .then((result) => {
-        const user = result.user;
-        let id = JSON.parse(localStorage.getItem("verificationId"));
-        if (id !== user.uid) {
-          alert(
-            "Verification failed ! \n No User ID found But you can visit the resturants page"
-          );
-          navigate("/restaurants");
-        } else {
-          alert("User Verified Success!");
-          navigate("/restaurants");
-        }
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
-    setOtp(false);
-    setisDraweropen(false);
-  }
-
-  const configureCaptcha_signIn = () => {
-    window.recaptchaVerifier = new Firebase.auth.RecaptchaVerifier(
-      "sign-in-button",
-      {
-        size: "invisible",
-        callback: () => {
-          onSigninSubmit();
-          alert("Recaptcha verified");
-        },
-        defaultCountry: "IN",
-      }
-    );
-  };
-  const configureCaptcha_login = () => {
-    window.recaptchaVerifier = new Firebase.auth.RecaptchaVerifier(
-      "sign-in-button",
-      {
-        size: "invisible",
-        callback: () => {
-          onLogInSubmit();
-          alert("Recaptcha verified");
-        },
-        defaultCountry: "IN",
-      }
-    );
-  };
-
-  const onSigninSubmit = (e) => {
-    e.preventDefault();
-    let user = JSON.parse(localStorage.getItem("user_details"));
-    if (user.name !== "" || user.email !== "" || user.number !== "") {
-      configureCaptcha_signIn();
-      const phoneNumber = "+91" + number;
-      const appVerifier = window.recaptchaVerifier;
-      Firebase.auth()
-        .signInWithPhoneNumber(phoneNumber, appVerifier)
-        .then((confirmationResult) => {
-          window.confirmationResult = confirmationResult;
-          alert("OTP Sent Successfully !");
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
-
-      setOtp(true);
-      setisDraweropen(true);
-    }
-  };
-
-  const onLogInSubmit = (e) => {
-    e.preventDefault();
-    let user = JSON.parse(localStorage.getItem("user_details"));
-    if (user.number !== "") {
-      configureCaptcha_login();
-      const phoneNumber = "+91" + number;
-      const appVerifier = window.recaptchaVerifier;
-      Firebase.auth()
-        .signInWithPhoneNumber(phoneNumber, appVerifier)
-        .then((confirmationResult) => {
-          window.confirmationResult = confirmationResult;
-          alert("OTP Sent Successfully !");
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
-
-      setOtp(true);
-      setisDraweropen(true);
-    }
-  };
-
   return (
     <>
-
       <div
         className="split"
         onClick={() => {
@@ -272,10 +98,11 @@ export function LandingPage() {
         <div className="left">
           <div className="check0">
             <div>
-              <img src="https://d1ye2ocuext585.cloudfront.net/images/s/Swiggy_Logo_9.png" />
+              <img
+                src="https://d1ye2ocuext585.cloudfront.net/images/s/Swiggy_Logo_9.png"
+                alt="Swiggy logo"
+              />
             </div>
-
-          
           </div>
           <Animation />
           <div className="trip" id="appending">
@@ -290,8 +117,6 @@ export function LandingPage() {
                 onChange={(e) => setQuery(e.target.value)}
                 value={isLoading ? "Fetching your current location..." : query}
               />
-
-            
 
               <button onClick={check} id="changing" value="toogle_food">
                 {isLoading ? <LoadingSpinner /> : "Find Food"}
@@ -335,8 +160,10 @@ export function LandingPage() {
               POPULAR CITIES IN INDIA
             </h3>
             <div style={{ paddingRight: "15px" }} className="popular alterflex">
-             
-             <Link to="/restaurants"> <div style={{ color: "grey" }}>Ahmedabad</div></Link>
+              <Link to="/restaurants">
+                {" "}
+                <div style={{ color: "grey" }}>Ahmedabad</div>
+              </Link>
               <div style={{ color: "lightgray" }}>Bangalore</div>
               <div style={{ color: "grey" }}>Chennai</div>
               <div style={{ color: "lightgray" }}>Delhi</div>
@@ -357,9 +184,10 @@ export function LandingPage() {
               height: "100%",
               objectFit: "cover",
               objectPosition: "-3px -27px",
-              marginLeft:"150px"
+              marginLeft: "150px",
             }}
             src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,h_1340/Lunch2-new_xexpaz"
+            alt=""
           />
         </div>
       </div>
@@ -402,12 +230,14 @@ export function LandingPage() {
               <img
                 style={{ height: "54px" }}
                 src="https://web.archive.org/web/20210903175340im_/https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,h_108/play_ip0jfp"
+                alt=""
               />
             </a>
             <a href="https://itunes.apple.com/in/app/swiggy-food-order-delivery/id989540920">
               <img
                 style={{ height: "54px" }}
                 src="https://web.archive.org/web/20210903175341im_/https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,h_108/iOS_ajgrty"
+                alt=""
               />
             </a>
           </div>
@@ -434,7 +264,8 @@ export function LandingPage() {
       <footer>
         <img
           className="footer_logo"
-          // src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_284/Logo_f5xzza"
+          src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_284/Logo_f5xzza"
+          alt=""
           width="200px"
           height="60px"
         />
@@ -450,21 +281,25 @@ export function LandingPage() {
         >
           <img
             src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_48,h_48/icon-facebook_tfqsuc"
+            alt=""
             width="24"
             height="24"
           />
           <img
             src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_48,h_48/icon-pinterest_kmz2wd"
+            alt=""
             width="24"
             height="24"
           />
           <img
             src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_48,h_48/icon-instagram_b7nubh"
+            alt=""
             width="24"
             height="24"
           />
           <img
             src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_48,h_48/icon-twitter_gtq8dv"
+            alt=""
             width="24"
             height="24"
           />
