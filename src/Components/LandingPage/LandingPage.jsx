@@ -291,9 +291,7 @@ export function LandingPage() {
                 value={isLoading ? "Fetching your current location..." : query}
               />
 
-              <button className="posey" onClick={geoLocation}>
-                <i className="far fa-location" /> Locate Me
-              </button>
+             
 
               <button onClick={check} id="changing" value="toogle_food">
                 {isLoading ? <LoadingSpinner /> : "Find Food"}
