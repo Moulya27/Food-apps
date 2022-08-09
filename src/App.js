@@ -6,7 +6,6 @@ import { Food_Main } from "./Components/RestaurantPage/Food_Main";
 import { Food_Detail } from "./Components/RestaurantPage/Food_Detail";
 import { PaymentDetails } from "./Components/CheckoutPage/PaymentDetails";
 import { ThankYou } from "./Components/Thankyou/Thankyou";
-import Navbar from "./Components/RestaurantPage/navbar";
 import Signup from "./Components/Auth/Signup";
 import Login from "./Components/Auth/Login";
 import NotLoggedIn from "./Components/Auth/NotLoggedIn";
