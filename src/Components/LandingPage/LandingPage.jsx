@@ -291,7 +291,7 @@ export function LandingPage() {
                 value={isLoading ? "Fetching your current location..." : query}
               />
 
-             
+            
 
               <button onClick={check} id="changing" value="toogle_food">
                 {isLoading ? <LoadingSpinner /> : "Find Food"}
